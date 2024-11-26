@@ -1,41 +1,52 @@
-import css from "./SearchBar.module.css"
+import React, { FormEvent } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { TbSearch } from "react-icons/tb"
+import { TbSearch } from "react-icons/tb";
 import { IconContext } from "react-icons";
+import { ISearchBarProps } from "./SearchBar.types";
+import css from "./SearchBar.module.css";
+import { number } from "prop-types";
 
-const SearchBar = ({ onSubmit }) => {
-  
-  const handleSubmit = (event) => {
+const SearchBar: React.FC<ISearchBarProps> = ({ onSubmit }) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.target;
-    const value = form.elements.search.value.trim();
-    value ? onSubmit(value) : toast.custom(<div className={css.toast}>You need to enter the text to find images</div>)
-    form.reset();
+
+    const form = event.currentTarget;
+    const value = form.elements.namedItem("search") as HTMLInputElement;
+
+    if (value.value.trim()) {
+      onSubmit(value.value.trim());
+    } else {
+      toast.custom(
+        <div className={css.toast}>
+          You need to enter the text to find images
+        </div>
+      );
     }
 
+    form.reset();
+  };
+
   return (
-<header className={css.header}>
+    <header className={css.header}>
       <form className={css.searchForm} onSubmit={handleSubmit}>
-        <IconContext.Provider value={{color: "#55883B", size: 35, className: "submitIcon"}}>
+        <IconContext.Provider
+          value={{ color: "#55883B", size: "35", className: "submitIcon" }}
+        >
           <button className={css.submitButton} type="submit">
-          <TbSearch/>
-        </button>
+            <TbSearch />
+          </button>
         </IconContext.Provider>
-    <input
-      className={css.formInput}
+        <input
+          className={css.formInput}
           type="text"
           name="search"
-      autoComplete="off"
-      autoFocus
-      placeholder="Search images and photos"
-    />
+          autoComplete="off"
+          placeholder="Search images"
+        />
       </form>
-      <Toaster
-      containerStyle={{
-    top: 100
-  }}/>
-</header>
-  )
-}
+      <Toaster />
+    </header>
+  );
+};
 
-export default SearchBar
+export default SearchBar;

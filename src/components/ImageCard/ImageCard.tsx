@@ -1,11 +1,15 @@
-import css from "./ImageCard.module.css"
+import React from "react";
+import { IImageCardProps } from "./ImageCard.types";
+import css from "./ImageCard.module.css";
 
-const ImageCard = ({cardData, isOpen}) => {
-    return (
-        <li className={css.imgCard} onClick={()=> isOpen(cardData)}>
-                <img className={css.img} src={cardData.urls.small} alt={cardData.alt_description} />
-      </li>
-  )
-}
+const ImageCard: React.FC<IImageCardProps> = ({ cardData, isOpen }) => {
+  const altText = cardData.alt_description || "Image description not available";
 
-export default ImageCard
+  return (
+    <li className={css.imgCard} onClick={() => isOpen(cardData)}>
+      <img className={css.img} src={cardData.urls.small} alt={altText} />
+    </li>
+  );
+};
+
+export default ImageCard;

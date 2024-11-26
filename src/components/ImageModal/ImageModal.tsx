@@ -1,8 +1,14 @@
-import ReactModal from 'react-modal';
-import { SlLike } from 'react-icons/sl';
-import css from './ImageModal.module.css';
+import React from "react";
+import ReactModal from "react-modal";
+import { SlLike } from "react-icons/sl";
+import { IImageModalProps } from "./ImageModal.types";
+import css from "./ImageModal.module.css";
 
-const ImageModal = ({ modal, modalClose, selectedImage }) => {
+const ImageModal: React.FC<IImageModalProps> = ({
+  modal,
+  modalClose,
+  selectedImage,
+}) => {
   const { urls, alt_description, likes } = selectedImage;
 
   return (
