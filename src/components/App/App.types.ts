@@ -3,7 +3,6 @@ export interface IAppState {
   totalPages?: number;
 }
 
-// ImageCard.types.ts
 export interface IImage {
   id: string;
   urls: {
@@ -20,4 +19,9 @@ export interface ISelectImg {
   };
   alt_description: string;
   likes: number;
+}
+
+export interface IApiResponse {
+  total_pages: number;
+  results: IImage[];
 }

@@ -6,7 +6,7 @@ import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import ImageModal from "../ImageModal/ImageModal";
 import { fetchPhotos } from "../../apiService/fetchCardData";
-import { IAppState, IImage, ISelectImg } from "./App.types"; 
+import { IAppState, IImage, ISelectImg, IApiResponse } from "./App.types";
 
 import "./App.css";
 
@@ -18,7 +18,7 @@ const App: React.FC = () => {
   const [photos, setPhotos] = useState<IImage[]>([]);
   const [param, setParam] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [selectImg, setSelectImg] = useState<ISelectImg>({
     urls: { regular: "" },
@@ -29,7 +29,7 @@ const App: React.FC = () => {
   const onSubmit = (query: string) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     setPhotos([]);
-    setPage({ currentPage: 1, totalPages: 0 }); 
+    setPage({ currentPage: 1, totalPages: 0 });
     setParam(query);
   };
 
@@ -44,7 +44,7 @@ const App: React.FC = () => {
     setModalIsOpen(true);
     setSelectImg({
       urls: imgData.urls,
-      alt_description: imgData.alt_description ?? "No description available", 
+      alt_description: imgData.alt_description ?? "No description available",
       likes: imgData.likes,
     });
   };
@@ -54,16 +54,16 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!param) return; 
+    if (!param) return;
     setLoader(true);
 
     async function getSearchData() {
       try {
-        const data = await fetchPhotos(param, page.currentPage);
-        
+        const data: IApiResponse = await fetchPhotos(param, page.currentPage);
+
         setPage((prevPage) => ({
           ...prevPage,
-          totalPages: data.total_pages, 
+          totalPages: data.total_pages,
         }));
 
         setPhotos((prevPhotos) =>
@@ -72,7 +72,7 @@ const App: React.FC = () => {
             : [...prevPhotos, ...data.results]
         );
       } catch (error) {
-        setError("An error occurred while fetching photos."); 
+        setError("An error occurred while fetching photos.");
       } finally {
         setLoader(false);
       }
